@@ -1,9 +1,49 @@
 # The 3 Commit Method
  The "3 Commit" Method (3CM) is a git workflow based on interface- and test- driven development for maintaining complex code at scale.
 
-## Workflow Overview
+- **Traceability**: Every resolved issue can be traced to a single commit on the `main` branch. Easy to revert if needed.
+- **Quality Assurance**: Every code change includes matching test cases. The test suite grows with the code base, reducing risk of regressions.
+- **Delivery At Scale**: This workflow decouples test development from code development, improving confidence in delivery at scale.
 
-This workflow ensures that each issue is addressed systematically with a focus on testing and code quality. It involves three main commits per issue, ensuring a clean and traceable history.
+## Workflow Overview
+1. Every issue is resolved in 3 commits.
+    1. The first commit adds test cases that should fail.
+    2. The second commit adds code that makes the test cases pass.
+    3. The third commit merges both the code & the tests into main, and closes the issue.
+
+```mermaid
+gitGraph TB:
+    commit id: "resolves-issue-0"
+    branch issue-1
+    branch issue-1-tests
+    checkout issue-1-tests
+    commit
+    commit
+    commit
+    checkout issue-1
+    merge issue-1-tests type: HIGHLIGHT id: "1) test-cases-expected-fail"
+    branch issue-1-develop
+    checkout issue-1-develop
+    commit
+    commit
+    commit
+    commit
+    commit
+    checkout issue-1
+    merge issue-1-develop type: HIGHLIGHT id: "2) code-changes-expected-pass"
+    checkout main
+    merge issue-1 type: HIGHLIGHT id: "3) resolves-issue-1"
+```
+
+### Automation
+1. Issue branches are automatically created by a GitHub Action when an issue is created.
+2. Pull Requests are used to merge code into issue branches.
+3. Pull Requests are automatically tested using GitHub Actions.
+4. Pull Requests are squash merged to keep the commit history clean.
+5. Pull Requests can only be merged into the `main` branch when all tests pass.
+6. The `main` branch is protected to ensure that all changes are made through Pull Requests.
+
+
 
 ### Step-by-Step Process
 
@@ -29,7 +69,7 @@ This workflow ensures that each issue is addressed systematically with a focus o
    graph TD;
        D[Write Failing Test Cases] --> E[Create First PR];
        E --> F[Review & Squash Merge];
-       F --> G[Single Commit on issue-xxx];
+       F --> G[First Commit on issue-xxx];
    ```
 
 4. **Second PR: Code Changes**
@@ -50,17 +90,7 @@ This workflow ensures that each issue is addressed systematically with a focus o
 
    ```mermaid
    graph TD;
-       L[Resolve Issue] --> M[Create PR to Merge into Main];
-       M --> N[Review & Squash Merge];
+       M[Create PR to Merge into Main] --> N[Review & Squash Merge];
        N --> O[Single Atomic Commit on Main];
+       O --> P[Resolve & Close Issue];
    ```
-
-## Benefits
-
-- **Traceability**: Each issue is linked to a specific set of commits, making it easy to track changes.
-- **Quality Assurance**: The workflow enforces test-driven development, ensuring that code changes are verified by tests.
-- **Clean History**: Squash merging keeps the commit history clean and focused on meaningful changes.
-
-## Conclusion
-
-The "3 Commit" Method provides a structured approach to handling issues in a codebase, emphasizing testing and code quality while maintaining a clean and traceable commit history.
