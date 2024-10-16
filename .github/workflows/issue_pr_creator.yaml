@@ -1,0 +1,18 @@
+on: 
+  issues:
+    types: [ opened ] # run this workflow only when a new issue is opened
+  pull_request:
+    types: [ opened, closed ]
+    
+jobs:
+  create_issue_branch:
+    runs-on: ubuntu-latest
+    permissions: # GITHUB_TOKEN requires additional permissions to create branches and pull requests 
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Create Issue Branch
+        uses: robvanderleek/create-issue-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
