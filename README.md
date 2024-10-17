@@ -5,7 +5,7 @@
 - **Quality Assurance**: Every code change includes matching test cases. The test suite grows with the code base, reducing risk of regressions.
 - **Delivery At Scale**: This workflow decouples test development from code development, improving confidence in delivery at scale.
 
-## GitHub Settings
+## Required GitHub Settings
 1. Settings > Actions > General > Workflow permissions
     1. Enable "Allow GitHub Actions to create and approve pull requests"
     2. Enable "Allow Read and write permissions"
@@ -18,9 +18,6 @@
             2. Add Status Checks as required by your project
         3. Enable "Require conversation resolution before merging"
         5. Enable the "Do not allow bypassing the above settings" option
-    2. Add rule for `issue-*`
-        1. Same as above ^^
-        
 
 ## Workflow Overview
 1. Every issue is resolved in 3 commits.
